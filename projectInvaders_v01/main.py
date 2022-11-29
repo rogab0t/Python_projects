@@ -4,7 +4,6 @@ from random import choice, randint #se importa la funicon choise y la funcion ra
 from settings import SCREEN_WIDTH #se importa al ancho de la ventana del modulo settings
 from settings import SCREEN_HEIGTH #se importa la altura de la ventana del modulo settings
 from settings import SCREEN_SIZE #se importa el tamaño de la ventana del modulo settings
-from settings import BLACK #se importa el color negro del modulo settings
 from settings import PURPLE #se importa el color morado del modulo settings
 from player import Player #importar la clase Player del modulo player
 from enemy import Alien, Extra #se importa la clase Alien y la clase Extra del modulo enemy
@@ -104,7 +103,7 @@ class Game(): #clase padre Game
     def alien_shoot(self):
         if self.aliens.sprites(): #validar si hay sprites/objetos dentro del grupo aliens
             random_alien = choice(self.aliens.sprites()) #se ejecuta la funcion choice para seleccionar un sprite/objeto aleatorio del grupo aliens
-            laser_sprite = LaserEnemy(random_alien.rect.center, SCREEN_HEIGTH, 8) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
+            laser_sprite = LaserEnemy(random_alien.rect.center, SCREEN_HEIGTH, 9) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
             self.alien_lasers.add(laser_sprite) #al atributo alien_lasers se le aplica el metodo add() para agregar el objeto laser_sprite insatanciado de la clase LaserEnemy dentro del grupo alien_lasers
             self.laser_enemy.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
 
@@ -187,7 +186,7 @@ class Game(): #clase padre Game
             SCREEN.blit(victory_surface, victory_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto de victoria y el rectangulo para posicionar dicho texto
 
     def run(self): #metodo para ejecutar el juego
-        self.player.update() #al grupoUnico player que es el contenedor del objeto player_sprite se le aplica el metodo para actualizar la funcionalidad del jugador
+        self.player.update() #al grupo Unico player que es el contenedor del objeto player_sprite se le aplica el metodo para actualizar la funcionalidad del jugador
         self.alien_lasers.update() #se llama a ejecuar el metodo update() de la clase LaserEnemy() para actualizar el funcionamiento/movimiento del laser  
         self.extra.update() #se llama a ejecutar el metodo update() de la clase Extra() para actualizar el funcionamiento/movimiento del enemigo extra
 
@@ -214,12 +213,11 @@ if __name__ == '__main__': #condicional para validar que se ejecute el codigo so
     game = Game() #objeto instanciado de la clase Game
 
     TIMER_ALIENLASER = pygame.USEREVENT + 1 #se crea un nuevo evento para ser un temporizador del disparo del enemigo
-    pygame.time.set_timer(TIMER_ALIENLASER, 600) #se crea el temporizador con el evento anterior el cual se ejecutara cada 600 milisegundos
+    pygame.time.set_timer(TIMER_ALIENLASER, 550) #se crea el temporizador con el evento anterior el cual se ejecutara cada 550 milisegundos
 
     while window: #condicional para mantener activa la ventana/superficie mientras el valor de window sea True
         for event in pygame.event.get(): #ciclo for por cada evento en el modulo event de pygame se ejeucta la funcion get() para pbetenr la lista de evetos de dicho modulo
             if event.type == pygame.QUIT: #condicional para cerrar la ventana si el tipo de evento por cada iteracion es igual al evento QUIT
-                #pygame.quit()
                 window = False #cambio de valor de window de True a False, terminando el ciclo While window/True cerrando la ventana
             if event.type == TIMER_ALIENLASER: #condicional para ejecutar el metodo si el tipo de evento es igual a TIMER_ALIENLASER el cual es el nuevo evento que se creo
                 game.alien_shoot() #se ejecuta el metodo para que el enemigo dispare en un tiempo determinado

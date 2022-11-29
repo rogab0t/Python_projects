@@ -44,7 +44,7 @@ class Player(pygame.sprite.Sprite): #clase padre/hija Player que hereda de la cl
             self.rect.right = self.limit_x #al valor rigth de rect se le asigna el valor de limit para colocarlo en la coordena del maximo del ancho de la superficice(ventana) del eje x
     
     def shoot_laser(self): #metodo para disparar el laser del jugador
-        self.lasers.add(Laser(self.rect.center, self.rect.bottom, 13)) #al atributo lasers se le aplica el metodo add() para agregar el objeto laser insatanciado de la clase Laser dentro del grupo lasers, el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser para colocarlo en medio del jugador, el parametro self.rect.bottom como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 9 para la velocidad de movimiento
+        self.lasers.add(Laser(self.rect.center, self.rect.bottom, 14)) #al atributo lasers se le aplica el metodo add() para agregar el objeto laser insatanciado de la clase Laser dentro del grupo lasers, el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser para colocarlo en medio del jugador, el parametro self.rect.bottom como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 14 para la velocidad de movimiento del laser
         self.laser_sound.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
 
     def update(self): #metodo para actualizar el funcionamiento/movimiento del jugador, herdado de la clase Sprite
