@@ -4,6 +4,7 @@ from random import choice, randint #se importa la funicon choise y la funcion ra
 from settings import SCREEN_WIDTH #se importa al ancho de la ventana del modulo settings
 from settings import SCREEN_HEIGTH #se importa la altura de la ventana del modulo settings
 from settings import SCREEN_SIZE #se importa el tamaño de la ventana del modulo settings
+from settings import BLACK #se importa el color negro del modulo settings
 from settings import PURPLE #se importa el color morado del modulo settings
 from player import Player #importar la clase Player del modulo player
 from enemy import Alien, Extra #se importa la clase Alien y la clase Extra del modulo enemy
@@ -110,7 +111,7 @@ class Game(): #clase padre Game
     def extra_alien_timer(self): #metodo para ser un temporizador de aparicion del enemigo extra
         self.extra_spawn_time -= 1 #al atributo extra_spawn_time que ya sera un numero aleatorio de entre 1500 y 2000, se le restara 1 a su valor cada vez que se ejecute el metodo
         if self.extra_spawn_time <= 0: #condicional para saber si el valor del atributo extra_spawn_time ha llegado a 0
-            self.extra.add(Extra(choice(['right','left']), SCREEN_WIDTH)) #al grupo individual 'extra' se le agrega el objeto instanciado de la clase Extra, con el parametro para saber el lado de aparicio el cual sera aleatorio de entre dos opciones dentro de una lista, y el otro parametro el lugar donde se movera dicho enemigo el cual sera el eje 'x' de la ventana(horizontal)
+            self.extra.add(Extra(choice(['right','left']), SCREEN_WIDTH)) #al grupo individual 'extra' se le agrega el objeto instanciado de la clase Extra, con el parametro para saber el lado de aparicion el cual sera aleatorio de entre dos opciones dentro de una lista, y el otro parametro el lugar donde se movera dicho enemigo el cual sera el eje 'x' de la ventana(horizontal)
             self.extra_spawn_time = randint(1500, 1800) #se vuelve a obtener un nuevo numero aleatorio den entre 1500 y 1800 para que se repita el proceso de aparicion del enemigo
             self.extra_sound.play() ##se utiliza la funcion play() para reproducir el sonido cada vez que se cumpla la condicion del timer llegado a 0
     
@@ -154,9 +155,6 @@ class Game(): #clase padre Game
                     laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo alien_lasers
                     self.player_explotion.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
                     self.lives -= 1 #al valor del atributo lives se le restara su mismo valor menos 1 cada vez que haya una colison del laser del enemigo con el jugador, asi se eliminara un vida y una imagen de vida
-                    if self.lives <= 0: #condicional para validar si el valor del atributo lives es menor o igual a 0
-                        pygame.quit() #se ejecuata la funcion para descativar la biblioteca pygame
-                        sys.exit() #se ejecuata la funcion para cerrar la ventana del juego
 
         #aliens
         if self.aliens: #condicional para validar si hay enemigos dentro del grupo aliens
@@ -181,9 +179,43 @@ class Game(): #clase padre Game
 
     def victory_message(self):
         if not self.aliens.sprites(): #condiconal para validaar si ya no se encuentra ningun spritet/objeto alien dentro del grupo aliens
-            victory_surface = self.font_game.render(f"You Won", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "You Won", se coloca Fasle para el antialiasing, asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+            victory_surface = self.font_game.render(f"YOU WIN", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "You Won", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
             victory_rect = victory_surface.get_rect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGTH / 2)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
             SCREEN.blit(victory_surface, victory_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto de victoria y el rectangulo para posicionar dicho texto
+            for player in self.player: #ciclo que itera cada elemento/sprite player dentro del grupo unico player
+                player.speed = 0 #al atributo speed del sprite player se le reasigna el valo de 0 para evitar el movimiento
+                player.ready = False #al atributo ready se le reasigna el valor de False para evitar que dispare
+            for alien in self.aliens: #ciclo que itera cada elemento/sprite alien dentro del grupo aliens
+                self.alien_direction = 0 #al atributo alien_direction de cada sprite alien dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
+            for extra in self.extra: #ciclo que itera cada elemento/sprite extra dentro del grupo unico extra
+                pygame.sprite.Sprite.kill(extra) #se utiliza la funcion kill(extra) de la clase Sprite del modulo sprite de la libreria pygame, el eobjeto/sprite a eliminar es el extra dentro del grupo unico extra
+                extra.speed = 0 #al atributo speed del sprite extra se le reasigna el valo de 0 para evitar el movimiento
+            
+            self.extra_sound.set_volume(0) #al atributo extra_sound del sprite extra se le aplica el metodo set_volume(0) para que no tenga volumen al momento de aparecer
+            self.extra_spawn_time += 0 #al atributo extra_spawn_time se le reasigna su mismo valor mas 0 para que no vuelva a reaparecer
+            pygame.time.set_timer(TIMER_ALIENLASER, -1) #al temporizador con el evento creado TIMER_ALIENLASER tiene el valor de -1 para evitar que disparen
+
+
+    def game_over(self): #metodo para mostar un mensaje de fin de juego
+        if self.lives <= 0: #condcicional para validar si el valor del atributo lives que son las vidas del jugador, es menor o igual a 0
+            SCREEN.fill(BLACK) #se pintade negro todala superficice/screen/ventana
+            defeat_surface = self.font_game.render(f"GAME OVER", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "GAME OVER", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+            defear_rect = defeat_surface.get_rect(center = (SCREEN_WIDTH / 2, SCREEN_HEIGTH / 2)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+            SCREEN.blit(defeat_surface, defear_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto de victoria y el rectangulo para posicionar dicho texto
+
+            for player in self.player: #ciclo que itera cada elemento/sprite player dentro del grupo unico player
+                player.speed = 0 #al atributo speed del sprite player se le reasigna el valo de 0 para evitar el movimiento
+                player.ready = False #al atributo ready se le reasigna el valor de False para evitar que dispare
+            for alien in self.aliens: #ciclo que itera cada elemento/sprite alien dentro del grupo aliens
+                self.alien_direction = 0 #al atributo alien_direction de cada sprite alien dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
+            for extra in self.extra: #ciclo que itera cada elemento/sprite extra dentro del grupo unico extra
+                pygame.sprite.Sprite.kill(extra) #se utiliza la funcion reomve(extra) de la clase Sprite del modulo sprite de la libreria pygame, el eobjeto/sprite a eliminar es el extra dentro del grupo unico extra
+                extra.speed = 0 #al atributo speed del sprite extra se le reasigna el valo de 0 para evitar el movimiento
+            
+            self.extra_sound.set_volume(0) #al atributo extra_sound del sprite extra se le aplica el metodo set_volume(0) para que no tenga volumen al momento de aparecer
+            self.extra_spawn_time += 0 #al atributo extra_spawn_time se le reasigna su mismo valor mas 0 para que no vuelva a reaparecer
+            pygame.time.set_timer(TIMER_ALIENLASER, -1) #al temporizador con el evento creado TIMER_ALIENLASER tiene el valor de -1 para evitar que disparen
+
 
     def run(self): #metodo para ejecutar el juego
         self.player.update() #al grupo Unico player que es el contenedor del objeto player_sprite se le aplica el metodo para actualizar la funcionalidad del jugador
@@ -203,10 +235,12 @@ class Game(): #clase padre Game
         self.extra.draw(SCREEN)  #se dibujan sobre la venata/superficie el contenido del grupo extra, el cual es el sprite/objeto del enemigo extra
         self.display_lives() #se llama a ejecutar el metodo display_lives() para colocar la cantidad de imagenes de la vidas correspondientes
         self.display_score() #se llama a ejecutar el metodo display_score() para colocar el texto con el puntaje
-        self.victory_message() #se llama a ejecutar el metodo victory_message() para colocar el texto de viactoria cuando se cumpla la condicion necesaria
+        self.victory_message() #se llama a ejecutar el metodo victory_message() para colocar el texto de victoria cuando se cumpla la condicion necesaria
+        self.game_over() #se llama a ejecutar el metodo .game_over() para colocar el texto de derrota cuando se cumpla la condicion necesaria
 
 if __name__ == '__main__': #condicional para validar que se ejecute el codigo solo si el nombre del archivo es main evitando que lo ejecute otro archivo
     pygame.init() #inicializar el modulo pygame con todo su contenido
+    pygame.display.set_caption('SpaceInvaders') #define el titulo de la ventana
     SCREEN = pygame.display.set_mode(SCREEN_SIZE) #constante con valor para crear la superficie/ventana con las dimensiones de SCREEN_SIZE
     window = True #valor True en la variable window para mantener activa/abirta la ventana mientras el valor siga siendo True
     clock = pygame.time.Clock() #se crear un reloj/contador
@@ -225,7 +259,6 @@ if __name__ == '__main__': #condicional para validar que se ejecute el codigo so
         image = pygame.image.load('../projectInvaders/images/background.jpg') #variable que obtendra la imagen del fondo desde su ruta
         SCREEN.blit(image,(0,0)) #se coloca/dibuja sobre la ventana/superficie mediante blit(), la imagen del fondo desde las posiciones (0, 0) en los ejes 'x' y 'y'
 
-        #SCREEN.fill(BLACK) #se rellena la superficie/ventana con el valor del color BLACK del modulo settings
         game.run() #se ejecuta el metodo run() del objeto game para ejecutar el juego despues de rellenar le superficie 
 
         pygame.display.flip() #Actualizar la pantalla en todo momento
