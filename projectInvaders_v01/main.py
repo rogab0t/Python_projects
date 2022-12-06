@@ -186,10 +186,12 @@ class Game(): #clase padre Game
 
                 #player collision
                 if pygame.sprite.spritecollide(alien, self.player, False): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para NO eliminar el sprite con el que ha colisionado el principal
+                    self.lives = 0 #al valor del atributo se le asigna el valor de 0 para ejecutar correctamente el metodo game_over()
                     self.game_over() #se llama a ejecutar el metodo game_over() para colocar el texto de derrota cuando se cumpla la condicion necesaria
 
-                #Screen Height
+                #screen Height
                 if alien.rect.y + 20 >= SCREEN_HEIGTH: #condicional para validar el el largo del sprite alien mas 20 pixeles es mayor o igual al largo de la superficice/ventana
+                    self.lives = 0 #al valor del atributo se le asigna el valor de 0 para ejecutar correctamente el metodo game_over()
                     self.game_over() #se llama a ejecutar el metodo game_over() para colocar el texto de derrota cuando se cumpla la condicion necesaria
 
 
@@ -352,7 +354,7 @@ class Game(): #clase padre Game
     def show_score(self):
         SCREEN.fill(BLACK) #se coloca/dibuja sobre la ventana/superficie mediante blit(), la imagen del fondo desde las posiciones (0, 0) en los ejes 'x' y 'y'
         high_title_surface = self.font_game.render(f"- HIGH SCORES -", False, 'white') #se crea una superficie para colocar el titulo de la seccion para mostrar los puntajes, el cual es un renderizado de texto con la fuente de letra, sin suavisado y de color blanco
-        high_title_rect = high_title_surface.get_rect(top_center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 250)) #se onbtiene un rectangulo a base de la superficie del titulo, el cual se colocara en el centro superior de la ventana, para ello se obtien la mitad del valor delalto y del ancho de la ventana y al alto se le resta un valor para desplazarlo hacia arriba
+        high_title_rect = high_title_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 250)) #se onbtiene un rectangulo a base de la superficie del titulo, el cual se colocara en el centro superior de la ventana, para ello se obtien la mitad del valor delalto y del ancho de la ventana y al alto se le resta un valor para desplazarlo hacia arriba
         SCREEN.blit(high_title_surface, high_title_rect) #se pinta/coloca sobre la ventana la superificie y el rectangulo
 
         content = SCORE_PATH.read_text() #variable que obtiene el conteindo del archivo score.txt, a base de su ruta y al aplicar el metodo read_text() para leer su contenido 

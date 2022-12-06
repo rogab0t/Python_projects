@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite): #clase padre/hija Player que hereda de la cl
         self.speed = speed #atributo para la velocidad que será asignado al instanciar/crear un objeto
         self.ready = True #atributo para disparar el laser del jugador, con valor true para poder empezar disparando
         self.shoot_time = 0 #atributo para saber cuando se ha disparado el laser, con valor 0 como inicio por no haber disparado
-        self.shoot_cooldown = 600 #atributo para poder dispararel laser cada 600 milisegundos
+        self.shoot_cooldown = 550 #atributo para poder dispararel laser cada 550 milisegundos
 
         self.lasers = pygame.sprite.Group() #se crear un grupo de sprites para los lasers
 
