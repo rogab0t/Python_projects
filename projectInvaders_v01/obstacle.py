@@ -7,6 +7,7 @@ class Block(pygame.sprite.Sprite): #clase hija Block que hereda de la clase Padr
         self.image.fill(color) #a la imagen se le da un color el cual será el que se coloque en el parametro
         self.rect = self.image.get_rect(topleft = (x, y)) #se obtiene un rectangulo a base de la superficie creada por image, el cual se empezara a colocara en la parte superior izquierda el cual tiene los valores (x, y) del parametro de __init__()
 
+
 #array que sera la forma de los obstaculos donde cada 'x' sera una bloque/objeto/sprite 
 shape = [ 
 '  xxxxxxx',
