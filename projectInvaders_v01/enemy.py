@@ -1,16 +1,16 @@
 import pygame #se improta el modulo pygame
 from settings import CURRENT_PATH #se importa la ruta actual desde el modulo settings
 
-class Alien(pygame.sprite.Sprite): #clase hija Alien que hereda de la clase Padre Sprite del modulo sprite para crear a los enemigos
-    def __init__(self, color, x ,y): #metodo inicializador de la clase Alien con el paramaetro para el colo del alien y la posicion donde sera pintado sobre la ventana/superificie
+class Human(pygame.sprite.Sprite): #clase hija Human que hereda de la clase Padre Sprite del modulo sprite para crear a los enemigos
+    def __init__(self, color, x ,y): #metodo inicializador de la clase Human con el paramaetro para el colo del human y la posicion donde sera pintado sobre la ventana/superificie
         super().__init__() #metodo super para utilizar el metodo inicializador de la clase Sprite
-        alien_path = CURRENT_PATH  / 'images' / (color + '.png') #variable que sera la ruta de las imagenes de los aliens, primero se coloca la ruta actual, concatenacion con slash, el directorio 'images', concatenacion con slash y el valor del color del enemigo el cual sera ingresado al momento de ejecutar el metodo nicializador, concatenado utilizando '+' con la extension '.png'
-        self.image = pygame.image.load(alien_path).convert_alpha() #atributo image para obtener la imagen del alien desde su ruta la cual es el valor de la varible alien_path y a esa imagen se le aplica el metodo para convertirla en alfa/transparente
+        human_path = CURRENT_PATH  / 'images' / (color + '.png') #variable que sera la ruta de las imagenes de los humans, primero se coloca la ruta actual, concatenacion con slash, el directorio 'images', concatenacion con slash y el valor del color del enemigo el cual sera ingresado al momento de ejecutar el metodo nicializador, concatenado utilizando '+' con la extension '.png'
+        self.image = pygame.image.load(human_path).convert_alpha() #atributo image para obtener la imagen del human desde su ruta la cual es el valor de la varible human_path y a esa imagen se le aplica el metodo para convertirla en alfa/transparente
         self.rect = self.image.get_rect(topleft = (x, y)) #atributo para crear un rectangulo a base de la imagen del atributo image a la cual se le aplica el metodo para obtener un rectangulo en la posicion izquierda superior el cual sera el valor de los parametros 'x, y' del metodo __init__
 
-        if color == 'green': #condicional para validar si el color del objeto/sprite/alien es verde
+        if color == 'green': #condicional para validar si el color del objeto/sprite/human es verde
             self.value = 100 #se asigna el valor de 100 al atributo del valor que tiene el enemigo de su color correspondiente
-        elif color == 'blue': #condicional para validar si el color del objeto/sprite/alien es amarillo
+        elif color == 'blue': #condicional para validar si el color del objeto/sprite/human es amarillo
             self.value = 200 #se asigna el valor de 100 al atributo del valor que tiene el enemigo de su color correspondiente
         else: #condicional para validar si el color del no es ni verde o amarillo
             self.value = 300 #se asigna el valor de 100 al atributo del valor que tiene el enemigo de su color correspondiente

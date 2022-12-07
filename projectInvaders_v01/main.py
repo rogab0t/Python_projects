@@ -10,7 +10,7 @@ from settings import PURPLE #se importa el color morado del modulo settings
 from settings import CURRENT_PATH #se importa la ruta actual desde el modulo settings
 from settings import SCORE_PATH #se importa la ruta del archivo score.txt desde el modulo settings
 from player import Player #importar la clase Player del modulo player
-from enemy import Alien, Extra #se importa la clase Alien y la clase Extra del modulo enemy
+from enemy import Human, Extra #se importa la clase Human y la clase Extra del modulo enemy
 from laser import LaserEnemy #se importa la clase LaserEnemy del modulo laser
 
 class Game(): #clase padre Game
@@ -42,11 +42,11 @@ class Game(): #clase padre Game
         self.obstacle_x_position = [number * (SCREEN_WIDTH / self.obstacle_amount - 25) for number in range(0, self.obstacle_amount)]  #atributo que es un array, para colocar la eparacion entre cada obstaculo, para ello, number va a ser un numero del 0 al 3 por tener 4 obstaculos, dependiendo del valor de number, este valor sera multiplicado por el resultado de dividir al ancho de la pnatalla entre la cantidad de obstaculos mas 25, y se obendra uno por uno un numero en el rango de 0 a la catidad de obstaculos que es 4, asi se colocaran 4 obstaculos sobre la pantalla en el eje 'x' de la misma, dichos numeros se guardan en el array
         self.create_multiple_obstacles(*self.obstacle_x_position, x_start = SCREEN_WIDTH / 7, y_start = 490) #se llama a ejecutar el metodo para crear los obstaculos con los parametros donde se colocara sobre la ventana/superficicie, el primer parametro es el desempaquetado utilizando '*' de los valores obtenidos en dicho atributo que es un array y los siguientes son donde se colocara el primer obstaculo sobre el eje 'x', dicho valor es el ancho de la ventana entre 7.5 para colocar todos los obstaculos centrados en el ancho de la ventana y el eje 'y' sobre la ventana
 
-        #Alien setup
-        self.aliens = pygame.sprite.Group() #grupo de sprites donde estaran colocados todos los objetos alien_sprite
-        self.alien_lasers = pygame.sprite.Group() #grupo donde se agregara el laser del enemigo
-        self.alien_setup(rows = 5, columns = 10) #se llama a ejecutar la funcion para crear a los enemigos en una posicion especifica, la cual sera una posicion horizontal de 8 enemigos y vertical de 6 filas de enemigos
-        self.alien_direction = 1 #atributo para mover al grupo de enemigos a la velociadad de 1 pixel en el eje 'x' de la ventana(derecha)
+        #Human setup
+        self.humans = pygame.sprite.Group() #grupo de sprites donde estaran colocados todos los objetos human_sprite
+        self.human_lasers = pygame.sprite.Group() #grupo donde se agregara el laser del enemigo
+        self.human_setup(rows = 5, columns = 10) #se llama a ejecutar la funcion para crear a los enemigos en una posicion especifica, la cual sera una posicion horizontal de 8 enemigos y vertical de 6 filas de enemigos
+        self.human_direction = 1 #atributo para mover al grupo de enemigos a la velociadad de 1 pixel en el eje 'x' de la ventana(derecha)
 
         #Extra setup
         self.extra = pygame.sprite.GroupSingle() #se crea un grupo individual para colocar al enemigo extra
@@ -89,48 +89,48 @@ class Game(): #clase padre Game
             self.create_obstacle(x_start, y_start, offset_x) #se ejecuta la funcion create_obstacle() con los parametros de colocacion en los ejes 'x' y 'y', y el valor de separacion en el eje 'x'
 
 
-    def alien_setup(self, rows, columns, x_distance = 50, y_distance = 50, x_offset = 110, y_offset = 80): #metodo para crear los enemigos en en una posicion especifica, la cual tendra una cantidad de filas y columnas de enemigos, y la distancia de separacion entre cada enemigo en el eje 'x' y en el eje 'y' y la separacion del cojunto de los enemigos en el eje 'x' y 'y'
+    def human_setup(self, rows, columns, x_distance = 50, y_distance = 50, x_offset = 110, y_offset = 80): #metodo para crear los enemigos en en una posicion especifica, la cual tendra una cantidad de filas y columnas de enemigos, y la distancia de separacion entre cada enemigo en el eje 'x' y en el eje 'y' y la separacion del cojunto de los enemigos en el eje 'x' y 'y'
         for row_index, row in enumerate(range(rows)): #ciclo para recorrer cada fila del rango filas y obtener su indice en enumerate() y asignarlo a row_index
             for col_index, column in enumerate(range(columns)): #ciclo para recorrer cada columna del rango columnas y obtener su indice con enumerate() y asignarlo a col_index
                 x = col_index * x_distance + x_offset#para la posicion en el eje 'x' se multiplicara el numero del indice de las columnas por la distancia de 'x' de cada enemigo y se suma la compensacion del eje 'x'
                 y = row_index * y_distance + y_offset #para la posicion en el eje 'y' se multiplicara el numero del indice de las filas por la distancia de 'y' de cada enemigo y se suma la compensacion del eje 'y'
 
                 if row_index == 0: #condicional que evalua si el indice de la fila es igual a 0
-                    alien_sprite = Alien('red', x, y) #se instancia/crea un objeto/sprite de la clase Alien con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
+                    human_sprite = Human('red', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
                 elif 1 <= row_index <= 2: #condicional que evalua si no es la condicion anterior, si 1 es menor o igual al indice de la fila que a su vez es menor o igual a 2, para que se ejecute el codigo si las estan entre el indice 1 y 2
-                    alien_sprite = Alien('blue', x, y) #se instancia/crea un objeto/sprite de la clase Alien con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
+                    human_sprite = Human('blue', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
                 else: #si no es ninguna de las condiciones anteriores lo cul seran las filas restantes que son las filas en los indices 3 y 4
-                    alien_sprite = Alien('green', x, y) #se instancia/crea un objeto/sprite de la clase Alien con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
+                    human_sprite = Human('green', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
 
-                self.aliens.add(alien_sprite) #se agregan al grupo aliens cada uno de los objetos/sprites creados de la clase Alien()
-
-
-    def alien_position_limit(self): #metodo para limitar el movimiento del grupo de enemigos y cambiar su dereccion de movimieto horzontal
-        all_aliens = self.aliens.sprites() #variable que contiene el grupo de enemigos al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
-        for alien in all_aliens: #ciclo para iterar por cada enemigo dentro del grupo aliens
-            if alien.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
-                self.alien_direction = -1 #se reasigan el valor del atributo alien_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 1 pixel
-                self.alien_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de dos pixeles en el eje 'y'
-            elif alien.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
-                self.alien_direction = 1 #se reasigan el valor del atributo alien_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 1 pixel
-                self.alien_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 2 pixeles en el eje 'y'
+                self.humans.add(human_sprite) #se agregan al grupo humans cada uno de los objetos/sprites creados de la clase Human()
 
 
-    def alien_move_dow(self, distance): #metodo para mover al grupo de enemigos hacia abajo cada vez que el algun enemigo del grupo golpee la parte izquierda o derecha de la ventana
-        if self.aliens: #condicionar que valida si son enemigos dentro del grupo aliens, solo asi se ejecutara el ciclo siguiente, para que al momento de que ya no haya enemigos se deje de ejecutar dicho ciclo
-            for alien in self.aliens.sprites(): #ciclo para iterar por cada enemigo dentro del grupo aliens al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
-                alien.rect.y += distance #al valor 'y' el cual es la posicion en el eje 'y' dentro de la ventana/screen, del rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se le asigna su valor mas el de distance el cual es la distancia que se movera hacia abajo y sera asignado al momento de llamar a ejecutar el metodo
+    def human_position_limit(self): #metodo para limitar el movimiento del grupo de enemigos y cambiar su dereccion de movimieto horzontal
+        all_humans = self.humans.sprites() #variable que contiene el grupo de enemigos al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
+        for human in all_humans: #ciclo para iterar por cada enemigo dentro del grupo humans
+            if human.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
+                self.human_direction = -1 #se reasigan el valor del atributo human_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 1 pixel
+                self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de dos pixeles en el eje 'y'
+            elif human.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
+                self.human_direction = 1 #se reasigan el valor del atributo human_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 1 pixel
+                self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 2 pixeles en el eje 'y'
 
 
-    def alien_shoot(self): #metodo para que el enemigo dispare
-        if self.aliens.sprites(): #validar si hay sprites/objetos dentro del grupo aliens
-            random_alien = choice(self.aliens.sprites()) #se ejecuta la funcion choice para seleccionar un sprite/objeto aleatorio del grupo aliens
-            laser_sprite = LaserEnemy(random_alien.rect.center, SCREEN_HEIGTH, 9) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
-            self.alien_lasers.add(laser_sprite) #al atributo alien_lasers se le aplica el metodo add() para agregar el objeto laser_sprite insatanciado de la clase LaserEnemy dentro del grupo alien_lasers
+    def human_move_dow(self, distance): #metodo para mover al grupo de enemigos hacia abajo cada vez que el algun enemigo del grupo golpee la parte izquierda o derecha de la ventana
+        if self.humans: #condicionar que valida si son enemigos dentro del grupo humans, solo asi se ejecutara el ciclo siguiente, para que al momento de que ya no haya enemigos se deje de ejecutar dicho ciclo
+            for human in self.humans.sprites(): #ciclo para iterar por cada enemigo dentro del grupo humans al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
+                human.rect.y += distance #al valor 'y' el cual es la posicion en el eje 'y' dentro de la ventana/screen, del rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se le asigna su valor mas el de distance el cual es la distancia que se movera hacia abajo y sera asignado al momento de llamar a ejecutar el metodo
+
+
+    def human_shoot(self): #metodo para que el enemigo dispare
+        if self.humans.sprites(): #validar si hay sprites/objetos dentro del grupo humans
+            random_human = choice(self.humans.sprites()) #se ejecuta la funcion choice para seleccionar un sprite/objeto aleatorio del grupo humans
+            laser_sprite = LaserEnemy(random_human.rect.center, SCREEN_HEIGTH, 9) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
+            self.human_lasers.add(laser_sprite) #al atributo human_lasers se le aplica el metodo add() para agregar el objeto laser_sprite insatanciado de la clase LaserEnemy dentro del grupo human_lasers
             self.laser_enemy.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
 
 
-    def extra_alien_timer(self): #metodo para ser un temporizador de aparicion del enemigo extra
+    def extra_human_timer(self): #metodo para ser un temporizador de aparicion del enemigo extra
         self.extra_spawn_time -= 1 #al atributo extra_spawn_time que ya sera un numero aleatorio de entre 1500 y 2000, se le restara 1 a su valor cada vez que se ejecute el metodo
         if self.extra_spawn_time <= 0: #condicional para saber si el valor del atributo extra_spawn_time ha llegado a 0
             self.extra.add(Extra(choice(['right','left']), SCREEN_WIDTH)) #al grupo individual 'extra' se le agrega el objeto instanciado de la clase Extra, con el parametro para saber el lado de aparicion el cual sera aleatorio de entre dos opciones dentro de una lista, y el otro parametro el lugar donde se movera dicho enemigo el cual sera el eje 'x' de la ventana(horizontal)
@@ -146,18 +146,18 @@ class Game(): #clase padre Game
                 if pygame.sprite.spritecollide(laser, self.blocks, True): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para eliminar dicho esprite con el que se ha colisionado
                     laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo lasers
                 
-                #alien collision
-                aliens_hit = pygame.sprite.spritecollide(laser, self.aliens, True) #si hubo una colision de sprites/con un objeto alien, el primer parametro es el sprite principal/laser del jugador, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para eliminar dicho esprite con el que se ha colisionado
-                if aliens_hit: #condicional para validar si hubo una colision lo cual es un valor aignado a alien_hit
-                    for alien in aliens_hit: #ciclo para iterar por cada alien/sprite que se encuentre dentro de la variable aliens_hit
-                        self.score += alien.value #el valor del atributo score se le agrega su mismo valor mas el valor del atributo value del alien/sprite dentro de aliens_hit, asi se agregara el valor correspondiente al alien colisionado el sprite principal
+                #human collision
+                humans_hit = pygame.sprite.spritecollide(laser, self.humans, True) #si hubo una colision de sprites/con un objeto human, el primer parametro es el sprite principal/laser del jugador, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para eliminar dicho esprite con el que se ha colisionado
+                if humans_hit: #condicional para validar si hubo una colision lo cual es un valor aignado a human_hit
+                    for human in humans_hit: #ciclo para iterar por cada human/sprite que se encuentre dentro de la variable humans_hit
+                        self.score += human.value #el valor del atributo score se le agrega su mismo valor mas el valor del atributo value del human/sprite dentro de humans_hit, asi se agregara el valor correspondiente al human colisionado el sprite principal
                     laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo lasers para eliminarlo al momento de la colision
                     self.enemy_explotion.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
                 
                 #laser enemy
-                laser_hit = pygame.sprite.spritecollide(laser, self.alien_lasers, True) #variable que tiene el valor asignado de una colisión de un sprite/laser del jugador con un laser del enemigo, el primer parámetro es el objeto/sprite principal, el segundo el el sprite con el que colisiona el principal y el tercero es el valor que tendra la funcion kill() para eliminar dicho esprite con el que se ha colisionado el sprite principal
+                laser_hit = pygame.sprite.spritecollide(laser, self.human_lasers, True) #variable que tiene el valor asignado de una colisión de un sprite/laser del jugador con un laser del enemigo, el primer parámetro es el objeto/sprite principal, el segundo el el sprite con el que colisiona el principal y el tercero es el valor que tendra la funcion kill() para eliminar dicho esprite con el que se ha colisionado el sprite principal
                 if laser_hit: #condicional para validar si hubo una colision lo cual es un valor asignado a laser_hit
-                    for laser in laser_hit: #ciclo para iterar por cada laser/sprite que se encuentre dentro de la variable aliens_hit
+                    for laser in laser_hit: #ciclo para iterar por cada laser/sprite que se encuentre dentro de la variable humans_hit
                         laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo lasers para eliminarlo al momento de la colision
 
                 #extra collision
@@ -167,31 +167,31 @@ class Game(): #clase padre Game
                     self.extra_explotion.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
                     
         #Enemy lasers
-        if self.alien_lasers: #condicional para validar si hay/se disparo algun laser del enemigo
-            for laser in self.alien_lasers: #ciclo para iterar por cada laser agregado/disparado dentro del grupo alien_lasers
+        if self.human_lasers: #condicional para validar si hay/se disparo algun laser del enemigo
+            for laser in self.human_lasers: #ciclo para iterar por cada laser agregado/disparado dentro del grupo human_lasers
                 #obstacle collision
                 if pygame.sprite.spritecollide(laser, self.blocks, True): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para eliminar el sprite con el que ha colisionado el principal
-                    laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo alien_lasers
+                    laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo human_lasers
                 
                 #player collision
                 if pygame.sprite.spritecollide(laser, self.player, False): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para NO eliminar el sprite con el que ha colisionado el principal
-                    laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo alien_lasers
+                    laser.kill() #se aplica el metodo kill() al sprite laser disparado que se encuantre dentro del grupo human_lasers
                     self.player_explotion.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
                     self.lives -= 1 #al valor del atributo lives se le restara su mismo valor menos 1 cada vez que haya una colison del laser del enemigo con el jugador, asi se eliminara un vida y una imagen de vida
 
         #enemies
-        if self.aliens: #condicional para validar si hay enemigos dentro del grupo aliens
-            for alien in self.aliens: #ciclo que itera cada sprite alien dentro del grupo aliens
+        if self.humans: #condicional para validar si hay enemigos dentro del grupo humans
+            for human in self.humans: #ciclo que itera cada sprite human dentro del grupo humans
                 #obstacle collision
-                pygame.sprite.spritecollide(alien, self.blocks, True) #se ejecuta la colision contra un bloque de los obstaculo, la cual tiene como parametros el primero es el sprite principal, el segundo es con que colisiona y el tercero es el valor de la funcion kill() para eliminar el sprite con el que ha colisionado el principal
+                pygame.sprite.spritecollide(human, self.blocks, True) #se ejecuta la colision contra un bloque de los obstaculo, la cual tiene como parametros el primero es el sprite principal, el segundo es con que colisiona y el tercero es el valor de la funcion kill() para eliminar el sprite con el que ha colisionado el principal
 
                 #player collision
-                if pygame.sprite.spritecollide(alien, self.player, False): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para NO eliminar el sprite con el que ha colisionado el principal
+                if pygame.sprite.spritecollide(human, self.player, False): #condicional para validar si hubo una colision de sprites, el primer parametro es el sprite principal, el segundo es contra que sprite hubo colision y el tercero es el valor que tendra la funcion kill() para NO eliminar el sprite con el que ha colisionado el principal
                     self.lives = 0 #al valor del atributo se le asigna el valor de 0 para ejecutar correctamente el metodo game_over()
                     self.game_over() #se llama a ejecutar el metodo game_over() para colocar el texto de derrota cuando se cumpla la condicion necesaria
 
                 #screen Height
-                if alien.rect.y + 20 >= SCREEN_HEIGTH: #condicional para validar el el largo del sprite alien mas 20 pixeles es mayor o igual al largo de la superficice/ventana
+                if human.rect.y + 20 >= SCREEN_HEIGTH: #condicional para validar el el largo del sprite human mas 20 pixeles es mayor o igual al largo de la superficice/ventana
                     self.lives = 0 #al valor del atributo se le asigna el valor de 0 para ejecutar correctamente el metodo game_over()
                     self.game_over() #se llama a ejecutar el metodo game_over() para colocar el texto de derrota cuando se cumpla la condicion necesaria
 
@@ -208,10 +208,10 @@ class Game(): #clase padre Game
         enemy4_path = CURRENT_PATH / 'images' / 'extra.png' #se declara la ruta donde se encuentra la imagen del enemigo extra
         enemy4 = pygame.image.load(enemy4_path) #variable que obtendra la imagen del enemigo extra desde su ruta
 
-        titleText_surfce = self.font_title.render(f"Space Invaders", False, 'white') #se crea una superficie para el texto del titulo, el cual sera un texto renderizado como imagen, el primer parametro es el texto, el segundo es el valor del antialiasing en Falsa para que se mantega pixelado y el tercero es el color del texto
+        titleText_surfce = self.font_title.render(f"Human Invaders", False, 'white') #se crea una superficie para el texto del titulo, el cual sera un texto renderizado como imagen, el primer parametro es el texto, el segundo es el valor del antialiasing en Falsa para que se mantega pixelado y el tercero es el color del texto
         titleText_rect = titleText_surfce.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 120)) #se obtiene un rectangulo a partir de la superfiice anterior, el cual se colocara en el centro de la ventana, obteniendo la mitad del valor del ancho y alto del SCREEN/ventana y se le agrega un valor para separarlo verticalmanete
 
-        titleText2_surface = self.font_game.render(f"START  [PRESS ENTER]", False, 'white') #se crea una superficie para el texto para pasar a la siguiente ventana, el cual sera un texto renderizado como imagen, el primer parametro es el texto, el segundo es el valor del antialiasing en Falsa para que se mantega pixelado y el tercero es el color del texto
+        titleText2_surface = self.font_game.render(f"START  -PRESS ENTER-", False, 'white') #se crea una superficie para el texto para pasar a la siguiente ventana, el cual sera un texto renderizado como imagen, el primer parametro es el texto, el segundo es el valor del antialiasing en Falsa para que se mantega pixelado y el tercero es el color del texto
         titleText2_rect = titleText2_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 60)) #se obtiene un rectangulo a partir de la superfiice anterior, el cual se colocara en el centro de la ventana, obteniendo la mitad del valor del ancho y alto del SCREEN/ventana y se le agrega un valor para separarlo verticalmanete
 
         enemy1Text_surface = self.font_game.render(f"   =   100 pts", False, 'green') #se crea una superficie para el texto del valor del enemigo, el cual sera un texto renderizado como imagen, el primer parametro es el texto, el segundo es el valor del antialiasing en Falsa para que se mantega pixelado y el tercero es el color del texto
@@ -244,7 +244,7 @@ class Game(): #clase padre Game
 
 
         self.laser_enemy.set_volume(0) #el volumen de los lasers del enemigo es 0 para que no se escuchen
-        for laser in self.alien_lasers: #ciclo para iterar dentro del grupo alien_lasers
+        for laser in self.human_lasers: #ciclo para iterar dentro del grupo human_lasers
             pygame.sprite.Sprite.kill(laser) #se eliminan los todos los lasers del enemigo que se encuentren dentro del grupo
 
         keys = pygame.key.get_pressed() #variable que obtiene una lista de las teclas que se pueden presionar, dicho metodo pertenece al modulo keys y a su vez dicho modulo pertenece al modulo pygame
@@ -288,7 +288,7 @@ class Game(): #clase padre Game
 
 
     def victory_message(self): #metodo para mostrar un mesaje de victoria
-        if not self.aliens.sprites(): #condiconal para validaar si ya no se encuentra ningun spritet/objeto alien dentro del grupo aliens
+        if not self.humans.sprites(): #condiconal para validaar si ya no se encuentra ningun spritet/objeto human dentro del grupo humans
             victory_surface = self.font_title.render(f"YOU WON", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "YOU WON", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
             victory_rect = victory_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 50)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
             SCREEN.blit(victory_surface, victory_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto de victoria y el rectangulo para posicionar dicho texto
@@ -297,15 +297,15 @@ class Game(): #clase padre Game
             score_rect = score_surface.get_rect(center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGTH / 2) + 50)) #se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana con un desplazamiento hacia abajo, para ello se obtienen los valores del ancho y el alto de dicha ventana/SCREEN y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana, al valor del alto se le suma el desplazamiento
             SCREEN.blit(score_surface, score_rect) #se coloca/pinta sobre la superficie/screen la imagen y el recatgulo para el score/puntaje
 
-            continue_surface = self.font_game.render(f"SCORES  [PRESS ENTER]", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "SCORES - [PRESS ENTER]", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+            continue_surface = self.font_game.render(f"SCORES  -PRESS ENTER-", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "SCORES -PRESS ENTER-", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
             continue_rect = continue_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 100)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana y se suma un valor para que se coloque por debajo del centro horizontalmente
             SCREEN.blit(continue_surface, continue_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto y el rectangulo para posicionar dicho texto
 
             for player in self.player: #ciclo que itera cada elemento/sprite player dentro del grupo unico player
                 player.speed = 0 #al atributo speed del sprite player se le reasigna el valo de 0 para evitar el movimiento
                 player.ready = False #al atributo ready se le reasigna el valor de False para evitar que dispare
-            for alien in self.aliens: #ciclo que itera cada elemento/sprite alien dentro del grupo aliens
-                self.alien_direction = 0 #al atributo alien_direction de cada sprite alien dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
+            for human in self.humans: #ciclo que itera cada elemento/sprite human dentro del grupo humans
+                self.human_direction = 0 #al atributo human_direction de cada sprite human dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
             for extra in self.extra: #ciclo que itera cada elemento/sprite extra dentro del grupo unico extra
                 pygame.sprite.Sprite.kill(extra) #se utiliza la funcion kill(extra) de la clase Sprite del modulo sprite de la libreria pygame, el eobjeto/sprite a eliminar es el extra dentro del grupo unico extra
                 extra.speed = 0 #al atributo speed del sprite extra se le reasigna el valo de 0 para evitar el movimiento
@@ -313,8 +313,8 @@ class Game(): #clase padre Game
             self.extra_sound.set_volume(0) #al atributo extra_sound del sprite extra se le aplica el metodo set_volume(0) para que no tenga volumen al momento de aparecer
             self.extra_spawn_time += 0 #al atributo extra_spawn_time se le reasigna su mismo valor mas 0 para que no vuelva a reaparecer
 
-            for laser in self.alien_lasers: #ciclo para iterar dentro del grupo alien_lasers
-                pygame.sprite.Sprite.kill(laser) #se ejecuta el metodo kill(laser) para eliminar cada laser dentro del grupo alien_lasers
+            for laser in self.human_lasers: #ciclo para iterar dentro del grupo human_lasers
+                pygame.sprite.Sprite.kill(laser) #se ejecuta el metodo kill(laser) para eliminar cada laser dentro del grupo human_lasers
 
             self.superate_high_score() #se llama a ejecutar el metodo para mostrar cada vez que se supere el puntaje mas alto
 
@@ -341,15 +341,15 @@ class Game(): #clase padre Game
         score_rect = score_surface.get_rect(center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGTH / 2) + 50)) #se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana con un desplazamiento hacia abajo, para ello se obtienen los valores del ancho y el alto de dicha ventana/SCREEN y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana, al valor del alto se le suma el desplazamiento
         SCREEN.blit(score_surface, score_rect) #se coloca/pinta sobre la superficie/screen la imagen y el recatgulo para el score/puntaje
 
-        continue_surface = self.font_game.render(f"SCORES  [PRESS ENTER]", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "SCORES - [PRESS ENTER]", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+        continue_surface = self.font_game.render(f"SCORES  -PRESS ENTER-", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "SCORES -PRESS ENTER-", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
         continue_rect = continue_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 100)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana y se suma un valor para que se coloque por debajo del centro horizontalmente
         SCREEN.blit(continue_surface, continue_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto y el rectangulo para posicionar dicho texto
 
         for player in self.player: #ciclo que itera cada elemento/sprite player dentro del grupo unico player
             player.speed = 0 #al atributo speed del sprite player se le reasigna el valo de 0 para evitar el movimiento
             player.ready = False #al atributo ready se le reasigna el valor de False para evitar que dispare
-        for alien in self.aliens: #ciclo que itera cada elemento/sprite alien dentro del grupo aliens
-            self.alien_direction = 0 #al atributo alien_direction de cada sprite alien dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
+        for human in self.humans: #ciclo que itera cada elemento/sprite human dentro del grupo humans
+            self.human_direction = 0 #al atributo human_direction de cada sprite human dentro del grupo, se le reasigna el valor de 0 para evitar el movimiento
         for extra in self.extra: #ciclo que itera cada elemento/sprite extra dentro del grupo unico extra
             pygame.sprite.Sprite.kill(extra) #se utiliza la funcion reomve(extra) de la clase Sprite del modulo sprite de la libreria pygame, el eobjeto/sprite a eliminar es el extra dentro del grupo unico extra
             extra.speed = 0 #al atributo speed del sprite extra se le reasigna el valo de 0 para evitar el movimiento
@@ -418,19 +418,19 @@ class Game(): #clase padre Game
         SCREEN.blit(image_background, (0,0)) #se coloca/dibuja sobre la ventana/superficie mediante blit(), la imagen del fondo desde las posiciones (0, 0) en los ejes 'x' y 'y'
 
         self.player.update() #al grupo Unico player que es el contenedor del objeto player_sprite se le aplica el metodo para actualizar la funcionalidad/movimiento del jugador
-        self.alien_lasers.update() #se llama a ejecuar el metodo update() de la clase LaserEnemy() para actualizar el funcionamiento/movimiento del laser  
+        self.human_lasers.update() #se llama a ejecuar el metodo update() de la clase LaserEnemy() para actualizar el funcionamiento/movimiento del laser  
         self.extra.update() #se llama a ejecutar el metodo update() de la clase Extra() para actualizar el funcionamiento/movimiento del enemigo extra
 
-        self.aliens.update(self.alien_direction) #al grupo aliens que es el contenedor de los objetos alien_sprite se le aplica el metodo para actualizar la funcionalidad/movimiento del grupo de enemigos con el valor del atributo que sera la direccion de movimiento del grupo de enemigos
-        self.alien_position_limit() #se llama a ejecutar el metodo para limitar el movimiento del grupo de enemigos dentro de la ventana
-        self.extra_alien_timer() #se llama a ejecutar el metodo para que empieze el temporizador al iniciar el juego
+        self.humans.update(self.human_direction) #al grupo humans que es el contenedor de los objetos human_sprite se le aplica el metodo para actualizar la funcionalidad/movimiento del grupo de enemigos con el valor del atributo que sera la direccion de movimiento del grupo de enemigos
+        self.human_position_limit() #se llama a ejecutar el metodo para limitar el movimiento del grupo de enemigos dentro de la ventana
+        self.extra_human_timer() #se llama a ejecutar el metodo para que empieze el temporizador al iniciar el juego
         self.collision_checks() #se llama a ejecutar el metodo collision_checks() para validar las colisiones
 
         self.player.sprite.lasers.draw(SCREEN) #se hace uso del metodo draw(SCREEN) para dibujar sobre la superficie/ventana, el objeto creado por el metodo shoot_laser() que se encuentra dentro del grupo lasers el cual sera un sprite/interactua, el cual se encuentra detro del GroupSingle y es el objeto player_sprite instanciado de la clase Player. Es colocado aqui para que se dibuje despues de actualizar la funcionalidad del juagdor y antes de la imagen del jugador, quedando debajo del mismo
         self.player.draw(SCREEN) #se dibujará sobre la superfice/ventana el objeto player_sprite el cual ya esta detro del GroupSingle
         self.blocks.draw(SCREEN) #se dibujan sobre la venata/superficie el contenido del grupo blocks, los cuales son los obstaculos creados
-        self.aliens.draw(SCREEN) #se dibujan sobre la venata/superficie el contenido del grupo aliens, los cuales son todos los enemigos creados
-        self.alien_lasers.draw(SCREEN) #se dibujan sobre la venata/superficie el contenido del grupo alien_lasers, el cual es el sprite/objeto del laser del enemigo
+        self.humans.draw(SCREEN) #se dibujan sobre la venata/superficie el contenido del grupo humans, los cuales son todos los enemigos creados
+        self.human_lasers.draw(SCREEN) #se dibujan sobre la venata/superficie el contenido del grupo human_lasers, el cual es el sprite/objeto del laser del enemigo
         self.extra.draw(SCREEN)  #se dibujan sobre la venata/superficie el contenido del grupo extra, el cual es el sprite/objeto del enemigo extra
         self.display_lives() #se llama a ejecutar el metodo display_lives() para colocar la cantidad de imagenes de la vidas correspondientes
         self.display_score() #se llama a ejecutar el metodo display_score() para colocar el texto con el puntaje
@@ -456,7 +456,7 @@ class Game(): #clase padre Game
 
 if __name__ == '__main__': #condicional para validar que se ejecute el codigo solo si el nombre del archivo es main evitando que lo ejecute otro archivo
     pygame.init() #inicializar el modulo pygame con todo su contenido
-    pygame.display.set_caption('SpaceInvaders') #define el titulo de la ventana
+    pygame.display.set_caption('Human-Invaders') #define el titulo de la ventana
     SCREEN = pygame.display.set_mode(SCREEN_SIZE) #constante con valor para crear la superficie/ventana con las dimensiones de SCREEN_SIZE
     window = True #valor True en la variable window para mantener activa/abirta la ventana mientras el valor siga siendo True
     clock = pygame.time.Clock() #se crear un reloj/contador
@@ -470,7 +470,7 @@ if __name__ == '__main__': #condicional para validar que se ejecute el codigo so
             if event.type == pygame.QUIT: #condicional para cerrar la ventana si el tipo de evento por cada iteracion es igual al evento QUIT
                 window = False #cambio de valor de window de True a False, terminando el ciclo While window/True cerrando la ventana
             if event.type == TIMER_ALIENLASER: #condicional para ejecutar el metodo si el tipo de evento es igual a TIMER_ALIENLASER el cual es el nuevo evento que fue creado
-                game.alien_shoot() #se ejecuta el metodo para que el enemigo dispare en un tiempo determinado
+                game.human_shoot() #se ejecuta el metodo para que el enemigo dispare en un tiempo determinado
 
         game.windows() #se ejecuta el metodo windows() para validar que ventana mostrar dependiendo de los valores de las variables
         pygame.display.flip() #Actualizar la pantalla en todo momento
