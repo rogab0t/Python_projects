@@ -279,10 +279,17 @@ class Game(): #clase padre Game
         high_score_rect = high_score_surface.get_rect(topleft = (180, 10)) #se crea un rectangulo a base de la superficie creada con el texto el cual se colocara a en parte superior izquierda con un desplazamiento positivo de 10 pixeles en el eje 'y'(vertical) y de 180 pixeles en el eje 'x'(horizontal), asi se colocara a un lado del score actual
         SCREEN.blit(high_score_surface, high_score_rect) #se coloca/pinta sobre la superficie/screen la imagen y el recatgulo para el hight score/puntaje mas alto
 
+    
+    def superate_high_score(self): #metodo para mostrar si se ha obtenido un puntaje mas alto
+        if self.score > self.high_score: #condicional para validar si el valor del socre actual es mayor que el score mas alto
+            new_score_surface = self.font_title.render(f"- NEW HIGH SCORE -", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "- NEW HIGH SCORE -", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+            new_score_rect = new_score_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 120)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana y al alto se le resta un valor para colocarlo mas arriba
+            SCREEN.blit(new_score_surface, new_score_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto y el rectangulo para posicionar dicho texto
+
 
     def victory_message(self): #metodo para mostrar un mesaje de victoria
         if not self.aliens.sprites(): #condiconal para validaar si ya no se encuentra ningun spritet/objeto alien dentro del grupo aliens
-            victory_surface = self.font_title.render(f"YOU WON", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "You Won", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
+            victory_surface = self.font_title.render(f"YOU WON", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "YOU WON", se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
             victory_rect = victory_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 50)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
             SCREEN.blit(victory_surface, victory_rect) #se dibuja/coloca sobre la ventana/screen mediante la funcion blit() la superifie con el texto de victoria y el rectangulo para posicionar dicho texto
 
@@ -309,6 +316,8 @@ class Game(): #clase padre Game
             for laser in self.alien_lasers: #ciclo para iterar dentro del grupo alien_lasers
                 pygame.sprite.Sprite.kill(laser) #se ejecuta el metodo kill(laser) para eliminar cada laser dentro del grupo alien_lasers
 
+            self.superate_high_score() #se llama a ejecutar el metodo para mostrar cada vez que se supere el puntaje mas alto
+
             keys = pygame.key.get_pressed() #variable que obtiene una lista de las teclas que se pueden presionar, dicho metodo pertenece al modulo keys y a su vez dicho modulo pertenece al modulo pygame
             if keys[pygame.K_RETURN]: #condicional para validar si la tecla presioanda es RETURN/ENTER
                 self.over = False #el valor del atributo cambia a False para NO mostrar la ventana de fin del juego
@@ -318,7 +327,7 @@ class Game(): #clase padre Game
                 self.obtain_score() #se ejecuta el metodo para guardar el puntaje en el archivo score.txt una sola vez solo cuando se presione el boton
                 self.extraer_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
                 self.high_score_list() #se llama a ejecutar el metodo obtener la lista ordenada de los puntajes
-                self.show_score() #se ejecuta el metodo para mostrar todos los puntajes
+                self.show_high_scores() #se ejecuta el metodo para mostrar todos los puntajes
 
 
     def game_over(self): #metodo para mostar un mensaje de fin de juego
@@ -349,6 +358,8 @@ class Game(): #clase padre Game
         self.extra_spawn_time += 0 #al atributo extra_spawn_time se le reasigna su mismo valor mas 0 para que no vuelva a reaparecer
         pygame.time.set_timer(TIMER_ALIENLASER, -1) #al temporizador con el evento creado TIMER_ALIENLASER tiene el valor de -1 para evitar que disparen
 
+        self.superate_high_score() #se llama a ejecutar el metodo para mostrar cada vez que se supere el puntaje mas alto
+
         keys = pygame.key.get_pressed() #variable que obtiene una lista de las teclas que se pueden presionar, dicho metodo pertenece al modulo keys y a su vez dicho modulo pertenece al modulo pygame
         if keys[pygame.K_RETURN]: #condicional para validar si la tecla presioanda es RETURN/ENTER
             self.over = False #el valor del atributo cambia a False para NO mostrar la ventana de fin del juego
@@ -357,7 +368,7 @@ class Game(): #clase padre Game
             self.scores = True #el valor del atributo cambia a True para mostrar la ventana de los puntajes
             self.extraer_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
             self.high_score_list() #se llama a ejecutar el metodo para obtener la lista ordenada de los puntajes
-            self.show_score() #se ejecuta el metodo para mostrar todos los puntajes
+            self.show_high_scores() #se ejecuta el metodo para mostrar todos los puntajes
 
     def obtain_score(self): #metodo para obtener el score del jugador y escribirlo en el archivo correspondiente(score.txt)
          with open(SCORE_PATH, 'a') as file: #se utiliza el contexto 'with' para crear la variable 'file' la cual tiene el valor asignado de abrir el documeto desde su ruta y con el tipo de gestion archivos de escritura el final al final del archivo para escribir cada nuevo puntaje dentro del archivo correspondiete(score.txt)
@@ -373,30 +384,30 @@ class Game(): #clase padre Game
         self.score5 = self.score_order[4] #atributo que tiene asignado el valor del indice 4 de la lista score_order ya ordenada
 
 
-    def show_score(self): #metodo para mostrar los 5 puntajes mas altos
+    def show_high_scores(self): #metodo para mostrar los 5 puntajes mas altos
         SCREEN.fill(BLACK) #se coloca/dibuja sobre la ventana/superficie mediante blit(), la imagen del fondo desde las posiciones (0, 0) en los ejes 'x' y 'y'
-        high_title_surface = self.font_game.render(f"- HIGH SCORES -", False, 'white') #se crea una superficie para colocar el titulo de la seccion para mostrar los puntajes, el cual es un renderizado de texto con la fuente de letra, sin suavisado y de color blanco
-        high_title_rect = high_title_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 250)) #se onbtiene un rectangulo a base de la superficie del titulo, el cual se colocara en el centro superior de la ventana, para ello se obtien la mitad del valor delalto y del ancho de la ventana y al alto se le resta un valor para desplazarlo hacia arriba
+        high_title_surface = self.font_title.render(f"- HIGH SCORES -", False, 'white') #se crea una superficie para colocar el titulo de la seccion para mostrar los puntajes, el cual es un renderizado de texto con la fuente de letra, sin suavisado y de color blanco
+        high_title_rect = high_title_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 210)) #se onbtiene un rectangulo a base de la superficie del titulo, el cual se colocara en el centro superior de la ventana, para ello se obtien la mitad del valor delalto y del ancho de la ventana y al alto se le resta un valor para desplazarlo hacia arriba
         SCREEN.blit(high_title_surface, high_title_rect) #se pinta/coloca sobre la ventana la superificie y el rectangulo
 
         score1_surface = self.font_game.render(f"1. SCORE : " + f"{self.score1}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "1. SCORE : " concatenado con el score del inidce correspondiente, se coloca Fale para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
-        scores1_rect = score1_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 100)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+        scores1_rect = score1_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 60)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
         SCREEN.blit(score1_surface, scores1_rect) #se pinta/coloca sobre la ventana/screen la superficie que muestra las puntuaciones y el rectangulo obtenido de dicha superficie
 
         score2_surface = self.font_game.render(f"2. SCORE : " + f"{self.score2}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "2. SCORE : " concatenado con el score del inidce correspondiente, se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
-        scores2_rect = score2_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 50)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+        scores2_rect = score2_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) - 10)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
         SCREEN.blit(score2_surface, scores2_rect) #se pinta/coloca sobre la ventana/screen la superficie que muestra las puntuaciones y el rectangulo obtenido de dicha superficie
 
         score3_surface = self.font_game.render(f"3. SCORE : " + f"{self.score3}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "1. SCORE : " concatenado con el score del inidce correspondiente, se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
-        scores3_rect = score3_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2))) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+        scores3_rect = score3_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 40)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
         SCREEN.blit(score3_surface, scores3_rect) #se pinta/coloca sobre la ventana/screen la superficie que muestra las puntuaciones y el rectangulo obtenido de dicha superficie
 
         score4_surface = self.font_game.render(f"4. SCORE : " + f"{self.score4}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "1. SCORE : " concatenado con el score del inidce correspondiente, se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
-        scores4_rect = score4_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 50)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+        scores4_rect = score4_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 90)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
         SCREEN.blit(score4_surface, scores4_rect) #se pinta/coloca sobre la ventana/screen la superficie que muestra las puntuaciones y el rectangulo obtenido de dicha superficie
 
         score5_surface = self.font_game.render(f"5. SCORE : " + f"{self.score5}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "1. SCORE : " concatenado con el score del inidce correspondiente, se coloca Fasle para el antialiasing asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
-        scores5_rect = score5_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 100)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
+        scores5_rect = score5_surface.get_rect(center = (SCREEN_WIDTH / 2, (SCREEN_HEIGTH / 2) + 140)) #variable donde se obtiene un rectangulo a base de la superficie obtenida de renderizar el texto como una imagen, dicho rectangulo con el texto se mostrara en el centro de la ventana, para ello se obtienen los valores del ancho y el alto de dicha ventana y esos valores de dividen entre dos para que asi dicho recangulo se coloque en el centro de la ventana
         SCREEN.blit(score5_surface, scores5_rect) #se pinta/coloca sobre la ventana/screen la superficie que muestra las puntuaciones y el rectangulo obtenido de dicha superficie
 
 

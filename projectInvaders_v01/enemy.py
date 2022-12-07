@@ -27,10 +27,10 @@ class Extra(pygame.sprite.Sprite): #clase hija Extra que hereda de la clase Padr
         self.image = pygame.image.load(self.image_extra_path).convert_alpha() #atributo image para obtener la imagen del jugador desde su ruta y a esa imagen se le aplica el metodo para convertirla en alfa/transparente
 
         if side == 'right': #condicional para saber si el lado es derecha
-            x = screen_width + 50 #el valor de la varible x es el ancho de la ventana mas 50 para que aparezca en el eje 'x' de la ventana mas 50 pixeles para que aparezca desde fuera de la ventana del lado derecho
+            x = screen_width + 150 #el valor de la varible x es el ancho de la ventana mas 150 para que aparezca en el eje 'x' de la ventana mas 50 pixeles para que aparezca desde fuera de la ventana del lado derecho
             self.speed = -3 #el valor de la velocidad en negativa a tres pixeles para que se mueva al lado izquierdo del eje 'x'
         else: #condicional para saber si el lado es izquierda ya que solo hay dos opciones y 'derecha' ya fue validado
-            x = -50  #el valor de la varible x es menos 50 para que aparezca en el eje 'x' de la ventana menos 50 pixeles para que aparezca desde fuera de la ventana del lado izquierdo
+            x = -150  #el valor de la varible x es menos 150 para que aparezca en el eje 'x' de la ventana menos 50 pixeles para que aparezca desde fuera de la ventana del lado izquierdo
             self.speed = 3 #el valor de la velocidad en positiva a tres pixeles para que se mueva al lado derecho del eje 'x'
 
         self.rect = self.image.get_rect(topleft = (x, 40)) #se obtiene un rectangulo a base de la imagen obtenida en image, el cual se colocara inicialmente en la parte superior izquierda cuyo valor es el valor de x el cual es el  eje 'x' de la ventana y en el eje 'y' en la posicion 40
