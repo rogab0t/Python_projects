@@ -33,7 +33,7 @@ class Extra(pygame.sprite.Sprite): #clase hija Extra que hereda de la clase Padr
             x = -50  #el valor de la varible x es menos 50 para que aparezca en el eje 'x' de la ventana menos 50 pixeles para que aparezca desde fuera de la ventana del lado izquierdo
             self.speed = 3 #el valor de la velocidad en positiva a tres pixeles para que se mueva al lado derecho del eje 'x'
 
-        self.rect = self.image.get_rect(topleft = (x, 20)) #se obtiene un rectangulo a base de la imagen obtenida en image, el cual se colocara inicialmente en la parte superior izquierda cuyo valor es el valor de x el cual es el  eje 'x' de la ventana y en el eje 'y' en la posicion 20
+        self.rect = self.image.get_rect(topleft = (x, 40)) #se obtiene un rectangulo a base de la imagen obtenida en image, el cual se colocara inicialmente en la parte superior izquierda cuyo valor es el valor de x el cual es el  eje 'x' de la ventana y en el eje 'y' en la posicion 40
 
 
     def update(self): #metodo para actualizar el movimiento/funcionalidad del objeto
