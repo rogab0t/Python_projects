@@ -5,6 +5,6 @@
 * Es de una sola ejecución y cuenta con un solo nivel
 
 ### Para iniciarlo:
-* Se hace mediante la terminal, utilizando el comando: **python3 main.py** o **python main.py** ya sea el caso
+* Se hace mediante la terminal, utilizando el comando: **python3 main.py** o **python main.py** ya sea el caso.
 (Se debe estar ubicado en la ruta del directorio que contiene el archivo **main.py**).
 * O mediante el botón **'Run Python File'** de VSC
