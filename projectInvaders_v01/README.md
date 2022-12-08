@@ -1,7 +1,7 @@
 # HUMAN INVADERS
 ### Resumen:
 
-* Este un videojuego creado con **Python en su versión 3.10.7** y que hace uso de la librería **Pygame en su versión 2.1.2**
+* Es un videojuego creado con **Python en su versión 3.10.7** y que hace uso de la librería **Pygame en su versión 2.1.2**
 * Es de una sola ejecución y cuenta con un solo nivel
 
 ### Para iniciarlo: 
