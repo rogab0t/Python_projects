@@ -28,7 +28,7 @@ class Game(): #clase padre Game
         self.lives = 3 #atributo para las vidas del jugador las cuales inician con el valor de 3
         self.player_image_path = CURRENT_PATH / 'images' / 'ship.png' #se declara la ruta donde se encuentra la imagen de la nave del jugador
         self.lives_surface = pygame.image.load(self.player_image_path).convert_alpha() #atributo que sera la imagen del jugador para mostrar cuantas vidas se tienen, la cantidad de vidas sera la cantidad de imagenes, dicha imagen es obtenida desde su ruta y a la misma se le ha aplicado el metodo para convertirla en alfa/transparente
-        self.lives_x_start = (SCREEN_WIDTH - 20) - (self.lives_surface.get_size()[0] * 2) #atributo que es la posicion inicial donde se colocaran las imagenes correspondientes a las vidas dentro de la ventana/screen(superior dercha) en el eje 'x', dicho valor se obtiene de restar al ancho de la ventana el cual ya se le resto 20, el valor del ancho de la imagen del jugador, para obtener dicho ancho se aplica el metodo get_size()[0] el cual retorna los valores de 'x' y 'y' con el valor de 0 dentro de los corchetes significando que se necesita el primer valor que es 'x' que es el ancho de la imagen, a ese valor se le multiplica por 2 para obtener el ancho de dos imagenes
+        self.lives_x_start = (SCREEN_WIDTH - 35) - (self.lives_surface.get_size()[0] * 2) #atributo que es la posicion inicial donde se colocaran las imagenes correspondientes a las vidas dentro de la ventana/screen(superior dercha) en el eje 'x', dicho valor se obtiene de restar al ancho de la ventana el cual ya se le resto 35, el valor del ancho de la imagen del jugador, para obtener dicho ancho se aplica el metodo get_size()[0] el cual retorna los valores de 'x' y 'y' con el valor de 0 dentro de los corchetes significando que se necesita el primer valor que es 'x' que es el ancho de la imagen, a ese valor se le multiplica por 2 para obtener el ancho de dos imagenes
         self.score = 0 #atributo para el puntaje el cual inicia con el valor 0
         self.font_path = CURRENT_PATH / 'fonts' / 'space_invaders.ttf' #se declara la ruta donde se encuentra la fuente de letra
         self.font_game = pygame.font.Font(self.font_path, 18) #atributo para la fuente de las letras para el juego, se utiliza la clase Font, del modulo font de la libreria de pygame, y se coloca la ruta del archivo de la fuente y el tamaño de fuente
@@ -96,7 +96,7 @@ class Game(): #clase padre Game
                 y = row_index * y_distance + y_offset #para la posicion en el eje 'y' se multiplicara el numero del indice de las filas por la distancia de 'y' de cada enemigo y se suma la compensacion del eje 'y'
 
                 if row_index == 0: #condicional que evalua si el indice de la fila es igual a 0
-                    human_sprite = Human('red', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
+                    human_sprite = Human('purple', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
                 elif 1 <= row_index <= 2: #condicional que evalua si no es la condicion anterior, si 1 es menor o igual al indice de la fila que a su vez es menor o igual a 2, para que se ejecute el codigo si las estan entre el indice 1 y 2
                     human_sprite = Human('blue', x, y) #se instancia/crea un objeto/sprite de la clase Human con los valores para los parametros empezando por el color, la posicion que tendra al colocarse en el eje 'x' y la posicion que tendra al colocarse en el eje 'y'
                 else: #si no es ninguna de las condiciones anteriores lo cul seran las filas restantes que son las filas en los indices 3 y 4
@@ -203,7 +203,7 @@ class Game(): #clase padre Game
         enemy1 = pygame.image.load(enemy1_path) #variable que obtendra la imagen del enemigo verde desde su ruta
         enemy2_path = CURRENT_PATH / 'images' / 'blue.png' #se declara la ruta donde se encuentra la imagen del enemigo azul
         enemy2 = pygame.image.load(enemy2_path) #variable que obtendra la imagen del enemigo azul desde su ruta
-        enemy3_path = CURRENT_PATH / 'images' / 'red.png' #se declara la ruta donde se encuentra la imagen del enemigo rojo
+        enemy3_path = CURRENT_PATH / 'images' / 'purple.png' #se declara la ruta donde se encuentra la imagen del enemigo rojo
         enemy3 = pygame.image.load(enemy3_path) #variable que obtendra la imagen del enemigo rojo desde su ruta
         enemy4_path = CURRENT_PATH / 'images' / 'extra.png' #se declara la ruta donde se encuentra la imagen del enemigo extra
         enemy4 = pygame.image.load(enemy4_path) #variable que obtendra la imagen del enemigo extra desde su ruta
@@ -256,7 +256,7 @@ class Game(): #clase padre Game
 
     def display_lives(self): #metodo para colocar lasimagenes de las vidas del jugador sobre la ventana/screen
         for live in range(self.lives - 1): #ciclo para iterar sobre el valor/vida del atributo self.lives el cual es 3 y a ese valor se le resta uno para que al momento de tener una sola vida ya no se muestre ninguna imagen y al tener 3 vidas solo se muestan 2 imagenes
-            x = self.lives_x_start + (live * (self.lives_surface.get_size()[0]) - 5) #el valor donde se colocaran las imagenes de las vidas sobre la ventana en el eje 'x', el cual es el resultado de sumar la posicion inicial en el eje 'x' que es la parte derecha, el valor de multiplicar cada valor/vida dentro de la varible vidas(1 o 2) por el tamaño del ancho de la imagen para las vidas y a ese resulatdo se le resta 5 para moverlos un poco hacia la izquierda, asi se colocaran dos imagenes una a lado de la otra en la esquina superior derecha
+            x = self.lives_x_start + (live * ((self.lives_surface.get_size()[0]) + 10)) #el valor donde se colocaran las imagenes de las vidas sobre la ventana en el eje 'x', el cual es el resultado de sumar la posicion inicial en el eje 'x' que es la parte derecha, el valor de multiplicar cada valor/vida dentro de la varible vidas(1 o 2) por el tamaño del ancho de la imagen para las vidas que tiene sumado 10 para separa cada imagn y a ese resulatdo se le resta 5 para moverlos un poco hacia la izquierda, asi se colocaran dos imagenes una a lado de la otra en la esquina superior derecha
             SCREEN.blit(self.lives_surface, (x, 8)) #se pintara sobre la ventana la imagen para las vidas en la posicion en sus respectivos ejes, en 'x' con el valor de la varible 'x', y en 'y' con el valor de 8 ya que asi se coloca cerca de la parte superior
 
 
