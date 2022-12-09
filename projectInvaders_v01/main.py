@@ -106,14 +106,24 @@ class Game(): #clase padre Game
 
 
     def human_position_limit(self): #metodo para limitar el movimiento del grupo de enemigos y cambiar su dereccion de movimieto horzontal
-        all_humans = self.humans.sprites() #variable que contiene el grupo de enemigos al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
-        for human in all_humans: #ciclo para iterar por cada enemigo dentro del grupo humans
-            if human.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
-                self.human_direction = -1 #se reasigan el valor del atributo human_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 1 pixel
-                self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de dos pixeles en el eje 'y'
-            elif human.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
-                self.human_direction = 1 #se reasigan el valor del atributo human_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 1 pixel
-                self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 2 pixeles en el eje 'y'
+        if len(self.humans) > 1: #condicional para validar si la longitud del grupo de stprites humans es mayor que 1
+            all_humans = self.humans.sprites() #variable que contiene el grupo de enemigos al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
+            for human in all_humans: #ciclo para iterar por cada enemigo dentro del grupo humans
+                if human.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
+                    self.human_direction = -1 #se reasigan el valor del atributo human_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 1 pixel
+                    self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de dos pixeles en el eje 'y'
+                elif human.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
+                    self.human_direction = 1 #se reasigan el valor del atributo human_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 1 pixel
+                    self.human_move_dow(2) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 2 pixeles en el eje 'y'
+        elif len(self.humans) == 1: #para validar si la longitud del grupo de stprites humans es igual a 1
+            all_humans = self.humans.sprites() #variable que contiene el grupo de enemigos al cual se le aplica el metodo sprites() para que cada enemigo dentro del grupo pueda interactuar
+            for human in all_humans: #ciclo para iterar por cada enemigo dentro del grupo humans
+                if human.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
+                    self.human_direction = - 6 #se reasigan el valor del atributo human_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 6 pixeles
+                    self.human_move_dow(15) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
+                elif human.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
+                    self.human_direction = 6 #se reasigan el valor del atributo human_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 6 pixeles
+                    self.human_move_dow(15) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
 
 
     def human_move_dow(self, distance): #metodo para mover al grupo de enemigos hacia abajo cada vez que el algun enemigo del grupo golpee la parte izquierda o derecha de la ventana
@@ -123,11 +133,17 @@ class Game(): #clase padre Game
 
 
     def human_shoot(self): #metodo para que el enemigo dispare
-        if self.humans.sprites(): #validar si hay sprites/objetos dentro del grupo humans
+        if len(self.humans) > 1: #condicional para validar si la longitud del grupo de stprites humans es mayor que 1
             random_human = choice(self.humans.sprites()) #se ejecuta la funcion choice para seleccionar un sprite/objeto aleatorio del grupo humans
-            laser_sprite = LaserEnemy(random_human.rect.center, SCREEN_HEIGTH, 9) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
+            laser_sprite = LaserEnemy(random_human.rect.center, SCREEN_HEIGTH, 10) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 8 para la velocidad de movimiento del laser sobre la ventana
             self.human_lasers.add(laser_sprite) #al atributo human_lasers se le aplica el metodo add() para agregar el objeto laser_sprite insatanciado de la clase LaserEnemy dentro del grupo human_lasers
             self.laser_enemy.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
+        elif len(self.humans) == 1: #para validar si la longitud del grupo de stprites humans es igual a 1
+            random_human = choice(self.humans.sprites()) #se ejecuta la funcion choice para seleccionar un sprite/objeto aleatorio del grupo humans
+            laser_sprite = LaserEnemy(random_human.rect.center, SCREEN_HEIGTH, 15) #objeto instanciado/creado de la clase LaserEnemy el cual tiene como parametros la posicion central del rectangulo obtenido a base de la imagen del laser del enemigo para colocarlo en medio de la imagen del enemigo, el parametro SCREEN_HEIGTH como limite de altura para que se destruya cuando el laser esté debajo de la altura de la parte inferior del jugador y 15 para la velocidad de movimiento del laser sobre la ventana
+            self.human_lasers.add(laser_sprite) #al atributo human_lasers se le aplica el metodo add() para agregar el objeto laser_sprite insatanciado de la clase LaserEnemy dentro del grupo human_lasers
+            self.laser_enemy.play() #se utiliza la funcion play() para reproducir el sonido cada vez que se ejecute la funcion
+
 
 
     def extra_human_timer(self): #metodo para ser un temporizador de aparicion del enemigo extra
@@ -462,15 +478,20 @@ if __name__ == '__main__': #condicional para validar que se ejecute el codigo so
     clock = pygame.time.Clock() #se crear un reloj/contador
     game = Game() #objeto instanciado de la clase Game el cual podra hacer uso de todos los metodos y atributos de dicha clase
 
-    TIMER_ALIENLASER = pygame.USEREVENT + 1 #se crea un nuevo evento para ser un temporizador del disparo del enemigo
-    pygame.time.set_timer(TIMER_ALIENLASER, 550) #se crea el temporizador con el evento anterior el cual se ejecutara cada 550 milisegundos
+    TIMER_ALIENLASER = pygame.USEREVENT + 1 #se crea un nuevo evento de usuario para ser un temporizador del disparo del enemigo
+    pygame.time.set_timer(TIMER_ALIENLASER, 500) #se crea el temporizador con el evento anterior el cual se ejecutara cada 550 milisegundos
+
+    TIMER_ALIENLASER_ALONE = pygame.USEREVENT + 2 #se crea un nuevo evento de usuario para ser un temporizador del disparo del enemigo final
+    pygame.time.set_timer(TIMER_ALIENLASER_ALONE, 200) #se crea el temporizador con el evento anterior el cual se ejecutara cada 250 milisegundos
 
     while window: #condicional para mantener activa la ventana/superficie mientras el valor de window sea True
         for event in pygame.event.get(): #ciclo for por cada evento en el modulo event de pygame se ejeucta la funcion get() para obetenr la lista de evetos de dicho modulo
             if event.type == pygame.QUIT: #condicional para cerrar la ventana si el tipo de evento por cada iteracion es igual al evento QUIT
                 window = False #cambio de valor de window de True a False, terminando el ciclo While window/True cerrando la ventana
-            if event.type == TIMER_ALIENLASER: #condicional para ejecutar el metodo si el tipo de evento es igual a TIMER_ALIENLASER el cual es el nuevo evento que fue creado
+            if event.type == TIMER_ALIENLASER and len(game.humans) > 1: #condicional para ejecutar el metodo si el tipo de evento es igual a TIMER_ALIENLASER el cual es el nuevo evento que fue creado y si la longitud del grupo de sprites humans de la clase Game es mayor que 1
                 game.human_shoot() #se ejecuta el metodo para que el enemigo dispare en un tiempo determinado
+            if event.type == TIMER_ALIENLASER_ALONE and len(game.humans) == 1: #condicional para ejecutar el metodo si el tipo de evento es igual a TIMER_ALIENLASER_ALONE el cual es el nuevo evento que fue creado y si la longitud del grupo de sprites humans de la clase Game es igual que 1
+                game.human_shoot()
 
         game.windows() #se ejecuta el metodo windows() para validar que ventana mostrar dependiendo de los valores de las variables
         pygame.display.flip() #Actualizar la pantalla en todo momento
