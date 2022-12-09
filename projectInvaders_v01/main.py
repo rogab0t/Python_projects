@@ -120,10 +120,10 @@ class Game(): #clase padre Game
             for human in all_humans: #ciclo para iterar por cada enemigo dentro del grupo humans
                 if human.rect.right >= SCREEN_WIDTH: #condicional para validar si la parte derecha de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor mayor o igual al ancho de la ventana/superficie/screen
                     self.human_direction = - 6 #se reasigan el valor del atributo human_direction colocando el valor negativo del original, haciendo que el grupo de enemigos se muevan de manera negativa en el eje 'x'(izquierda) de la ventana a la velocidad de 6 pixeles
-                    self.human_move_dow(15) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
+                    self.human_move_dow(25) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
                 elif human.rect.left <= 0: #condicional para validar si la parte izquierda de cada rectangulo el cual es el objeto sobre el que esta pintado la imagen del enemigo, se encuentra en un valor menor o igual a 0 en el eje 'y'
                     self.human_direction = 6 #se reasigan el valor del atributo human_direction colocando el valor positivo de nuevo, haciendo que el grupo de enemigos se muevan de manera postiva en el eje 'x'(derecha) de la ventana a la velocidad de 6 pixeles
-                    self.human_move_dow(15) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
+                    self.human_move_dow(25) #se llama a ejecutar el metodo para mover hacia abajo el grupo de enemigos a una distancia de 15 pixeles en el eje 'y'
 
 
     def human_move_dow(self, distance): #metodo para mover al grupo de enemigos hacia abajo cada vez que el algun enemigo del grupo golpee la parte izquierda o derecha de la ventana
@@ -373,6 +373,7 @@ class Game(): #clase padre Game
         self.extra_sound.set_volume(0) #al atributo extra_sound del sprite extra se le aplica el metodo set_volume(0) para que no tenga volumen al momento de aparecer
         self.extra_spawn_time += 0 #al atributo extra_spawn_time se le reasigna su mismo valor mas 0 para que no vuelva a reaparecer
         pygame.time.set_timer(TIMER_ALIENLASER, -1) #al temporizador con el evento creado TIMER_ALIENLASER tiene el valor de -1 para evitar que disparen
+        pygame.time.set_timer(TIMER_ALIENLASER_ALONE, -1)#al temporizador con el evento creado TIMER_ALIENLASER tiene el valor de -1 para evitar que disparen
 
         self.superate_high_score() #se llama a ejecutar el metodo para mostrar cada vez que se supere el puntaje mas alto
 
