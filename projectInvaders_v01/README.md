@@ -10,3 +10,8 @@
   * (Se debe estar ubicado en la ruta del directorio que contiene el archivo **main.py**).
 
 * O mediante el botón **'Run Python File'** de VSC
+
+  * (Se debe estar ubicado en la ruta del directorio que contiene el archivo **main.py** en la terminal ejecutada por VSC).
+
+### Requisitos:
+* El archivo 'score.txt' siempre debe de tener el valor **0** en las primeras 5 lineas
