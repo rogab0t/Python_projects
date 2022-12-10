@@ -483,7 +483,7 @@ if __name__ == '__main__': #condicional para validar que se ejecute el codigo so
     pygame.time.set_timer(TIMER_ALIENLASER, 500) #se crea el temporizador con el evento anterior el cual se ejecutara cada 550 milisegundos
 
     TIMER_ALIENLASER_ALONE = pygame.USEREVENT + 2 #se crea un nuevo evento de usuario para ser un temporizador del disparo del enemigo final
-    pygame.time.set_timer(TIMER_ALIENLASER_ALONE, 200) #se crea el temporizador con el evento anterior el cual se ejecutara cada 250 milisegundos
+    pygame.time.set_timer(TIMER_ALIENLASER_ALONE, 150) #se crea el temporizador con el evento anterior el cual se ejecutara cada 150 milisegundos
 
     while window: #condicional para mantener activa la ventana/superficie mientras el valor de window sea True
         for event in pygame.event.get(): #ciclo for por cada evento en el modulo event de pygame se ejeucta la funcion get() para obetenr la lista de evetos de dicho modulo
