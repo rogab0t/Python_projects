@@ -276,16 +276,18 @@ class Game(): #clase padre Game
             SCREEN.blit(self.lives_surface, (x, 8)) #se pintara sobre la ventana la imagen para las vidas en la posicion en sus respectivos ejes, en 'x' con el valor de la varible 'x', y en 'y' con el valor de 8 ya que asi se coloca cerca de la parte superior
 
 
-    def extraer_high_score(self): #metodo para obtener el mayor puntaje desde el archivo score.txt
+    def extract_high_score(self): #metodo para obtener el mayor puntaje desde el archivo score.txt
         self.score_order = [] #atributo que es una lista vacia donde se colocaran los valores/puntajes del archivo score.txt
-        with open(SCORE_PATH, 'r') as archivo: #se utiliza el contexto 'with' para crear la variable 'archivo' la cual tiene el valor asignado de abrir el documeto desde su ruta y con el tipo de gestion archivos de lectura para obtener los puntajes dentro del archivo correspondiete(score.txt)
-            self.score_order = [int(score) for score in archivo.readlines()] #al atributo que es una lista vacia se le asigna el valor de leer linea por linea cada score del archivo score.txt y dichos scores seran convertidos a valores enteros
+        with open(SCORE_PATH, 'r') as file: #se utiliza el contexto 'with' para crear la variable 'file' la cual tiene el valor asignado de abrir el documeto desde su ruta y con el tipo de gestion archivos de lectura para obtener los puntajes dentro del archivo correspondiete(score.txt)
+            for line in file.readlines(): #ciclo para iterar por cada liena dentro del archivo 'score.txt' al cual se le aplica el metodo para leer linea por linea
+                score = line.replace('\n', '') #variable a la cual se le asigna el valor de cada linea con el string '\n' remplazado por nada para tener solo un numero que sigue siendo un string
+                self.score_order.append(int(score)) #a la lista se le van ingresando los valores de la variable score los cuales primero son convertidos a valores de numeros enteros
         self.score_order.sort(reverse=True) #al los valores dentro de la lista se le aplica el metodo sort() para ordenar dichos valores ya siendo numero enteros y en dicho metodo se le coloca el parametro reverse con el valor asignado de True para ordenarlo con el mayor valor en el primer indice
-        self.high_score = max(self.score_order) #atributo el cual es una variable que tiene asignado el mayor valor de la lista self.score_order, utilizando la funcion max() con el nombre de la lista con los scores
+        self.high_score = max(self.score_order) #atributo el cual es una variable que tiene asignado el mayor valor de la lista self.score_order, utilizando la funcion max() con el nombre de la lista que contiene los scores ya ordenados
 
 
     def display_score(self): #metodo para colocar el texto y la puntuacion del jugador sobre la ventana/screen
-        self.extraer_high_score() #se llama a ejecutar el metodo extraer_high_score() cada vez que se tenga que mostrar el score actual y el mas alto para colocar ambos scores
+        self.extract_high_score() #se llama a ejecutar el metodo extract_high_score() cada vez que se tenga que mostrar el score actual y el mas alto para colocar ambos scores
 
         score_surface = self.font_game.render(f"score: {self.score}", False, 'white') #variable que sera la superficie/imagen la cual sera un renderizado de un texto el cual es "score {}" y dentro de las llaves se colocara el valor del atributo score el cual sera convetido a texto, se coloca Fasle para el antialiasing, asi se las letras se mostraran mas pixeladas y se le coloca el color blanco
         score_rect = score_surface.get_rect(topleft = (20, 10)) #se crea un rectangulo a base de la superficie creada con el texto el cual se colocara a en parte superior izquierda con un desplazamiento positivo de 20 pixeles en el eje 'x' y 10 pixeles en el eje 'y'
@@ -341,7 +343,7 @@ class Game(): #clase padre Game
                 self.mainScreen = False #el valor del atributo cambia a False para NO mostrar la ventana del menu principal
                 self.scores = True #el valor del atributo cambia a True para mostrar la ventana de los puntakes
                 self.obtain_score() #se ejecuta el metodo para guardar el puntaje en el archivo score.txt una sola vez solo cuando se presione el boton
-                self.extraer_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
+                self.extract_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
                 self.high_score_list() #se llama a ejecutar el metodo obtener la lista ordenada de los puntajes
                 self.show_high_scores() #se ejecuta el metodo para mostrar todos los puntajes
 
@@ -383,7 +385,7 @@ class Game(): #clase padre Game
             self.startGame = False #el valor del atributo cambia a False para NO mostrar la ventana del juego
             self.mainScreen = False #el valor del atributo cambia a False para NO mostrar la ventana del menu principal
             self.scores = True #el valor del atributo cambia a True para mostrar la ventana de los puntajes
-            self.extraer_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
+            self.extract_high_score() #se llama a ejecutar el metodo para obtener el puntaje mas alto
             self.high_score_list() #se llama a ejecutar el metodo para obtener la lista ordenada de los puntajes
             self.show_high_scores() #se ejecuta el metodo para mostrar todos los puntajes
 
